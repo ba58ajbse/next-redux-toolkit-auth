@@ -5,16 +5,16 @@ import { auth } from '../utils/firebase'
 import { useDispatch } from 'react-redux'
 import { setAuthenticate } from '../store/slices/authSlice'
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const router  = useRouter()
   const dispatch = useDispatch()
 
-  const logIn = async (e: FormEvent<HTMLFormElement>) => {
+  const signUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const res = await auth.signInWithEmailAndPassword(email, password)
+      const res = await auth.createUserWithEmailAndPassword(email, password)
       if (res.user) {
         dispatch(setAuthenticate(res.user.uid))
         router.push('/dashboard')
@@ -26,7 +26,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <form onSubmit={logIn}>
+      <form onSubmit={signUp}>
         <div>
           <label htmlFor="email">Email: </label>
           <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -35,11 +35,11 @@ const LoginPage = () => {
           <label htmlFor="password">Password: </label>
           <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Signup</button>
       </form>
-      <Link href='/signup'><a>to signup</a></Link>
+      <Link href='/login'><a>to login</a></Link>
     </div>
   )
 }
 
-export default LoginPage
+export default SignUpPage
