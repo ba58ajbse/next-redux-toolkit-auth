@@ -9,7 +9,6 @@ const config = {
   messagingSenderId: process.env.NEXT_PUBLIC_FB_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FB_APP_ID,
 }
-console.log(process.env.FB_APP_ID)
 // initializeを複数回走らせない
 if (firebase.apps.length === 0) {
   firebase.initializeApp(config)
