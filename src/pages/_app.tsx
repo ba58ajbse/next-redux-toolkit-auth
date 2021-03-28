@@ -1,8 +1,8 @@
 import React, { ComponentType } from 'react'
 import { Provider } from 'react-redux'
 import { AppInitialProps } from 'next/app'
-
 import { store } from '../store/store'
+import Navbar from '../components/Navbar'
 
 const MyApp = ({
   Component,
@@ -13,7 +13,8 @@ const MyApp = ({
 }) => {
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <Navbar />
+        <Component {...pageProps} />
     </Provider>
   )
 }
