@@ -25,7 +25,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <div>
+    <div style={{ marginTop: 40 }}>
       <h1>Dashboard Page</h1>
       <p>{userState.uid}</p>
       <button onClick={logOut}>logout</button>

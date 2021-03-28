@@ -25,7 +25,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div>
+    <div style={{ marginTop: 60 }}>
       <form onSubmit={logIn}>
         <div>
           <label htmlFor="email">Email: </label>

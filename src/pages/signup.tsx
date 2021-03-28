@@ -25,7 +25,7 @@ const SignUpPage = () => {
   }
 
   return (
-    <div>
+    <div style={{ marginTop: 60 }}>
       <form onSubmit={signUp}>
         <div>
           <label htmlFor="email">Email: </label>
