@@ -16,16 +16,15 @@ const LoginPage = () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password)
       if (res.user) {
-        const name = await getName(res.user.uid)
-        if (name) {
-          const userInfo = {
-            uid: res.user.uid,
-            name: name,
-            groupId: [],
-          }
-          dispatch(setAuthenticate(userInfo))
-          router.push('/dashboard')
+        const data = await getName(res.user.uid)
+        const userInfo = {
+          uid: res.user.uid,
+          name: data.name,
+          groupId: data.groupId,
         }
+
+        dispatch(setAuthenticate(userInfo))
+        router.push('/dashboard')
       }
     } catch (error) {
       console.log(error.message)
@@ -33,18 +32,19 @@ const LoginPage = () => {
   }
 
   const getName = async (uid: string) => {
-    let info
+    let name = ''
+    let groupId: string[] = []
     await db.collection('users')
             .where('uid', '==', uid)
             .get()
             .then((snapshots) => {
               snapshots.forEach((doc) => {
-                console.log(doc.data())
-                info = doc.data().name
+                name = doc.data().name
+                groupId = doc.data().groupId
               })
             })
             .catch((error) => console.log(error.message))
-    return info
+    return { name, groupId }
   }
 
   return (
