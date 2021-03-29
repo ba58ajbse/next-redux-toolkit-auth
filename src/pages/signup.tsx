@@ -20,7 +20,7 @@ const SignUpPage = () => {
         router.push('/dashboard')
       }
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
