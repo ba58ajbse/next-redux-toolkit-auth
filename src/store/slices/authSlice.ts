@@ -49,11 +49,22 @@ export const authSlice = createSlice({
           authenticated: false,
         }
       }
+    },
+    setGroup: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          groupId: [
+            ...state.user.groupId, action.payload
+          ]
+        }
+      }
     }
   }
 })
 
-export const { setAuthenticate, resetAuthenticate } = authSlice.actions
+export const { setAuthenticate, resetAuthenticate, setGroup } = authSlice.actions
 
 export const selectAuth = (state: RootState) => state.auth.user
 
