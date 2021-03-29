@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { auth } from '../utils/firebase'
+import { auth, db } from '../utils/firebase'
 import { useDispatch } from 'react-redux'
 import { setAuthenticate } from '../store/slices/authSlice'
 
@@ -16,12 +16,35 @@ const LoginPage = () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password)
       if (res.user) {
-        dispatch(setAuthenticate(res.user.uid))
-        router.push('/dashboard')
+        const name = await getName(res.user.uid)
+        if (name) {
+          const userInfo = {
+            uid: res.user.uid,
+            name: name,
+            groupId: [],
+          }
+          dispatch(setAuthenticate(userInfo))
+          router.push('/dashboard')
+        }
       }
     } catch (error) {
       console.log(error.message)
     }
+  }
+
+  const getName = async (uid: string) => {
+    let info
+    await db.collection('users')
+            .where('uid', '==', uid)
+            .get()
+            .then((snapshots) => {
+              snapshots.forEach((doc) => {
+                console.log(doc.data())
+                info = doc.data().name
+              })
+            })
+            .catch((error) => console.log(error.message))
+    return info
   }
 
   return (
