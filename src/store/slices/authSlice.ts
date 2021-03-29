@@ -4,13 +4,22 @@ import { RootState } from '../store'
 type AuthType = {
   user: {
     uid: string
+    name: string
+    groupId: string[]
     authenticated: boolean
   }
+}
+type UserInfoType = {
+  uid: string
+  name: string
+  groupId: string[]
 }
 
 const initialState: AuthType = {
   user: {
     uid: '',
+    name: '',
+    groupId: [],
     authenticated: false,
   }
 }
@@ -19,11 +28,13 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuthenticate: (state, action: PayloadAction<string>) => {
+    setAuthenticate: (state, action: PayloadAction<UserInfoType>) => {
       return {
         ...state.user,
         user: {
-          uid: action.payload,
+          uid: action.payload.uid,
+          name: action.payload.name,
+          groupId: action.payload.groupId,
           authenticated: true
         }
       }
@@ -33,6 +44,8 @@ export const authSlice = createSlice({
         ...state.user,
         user: {
           uid: '',
+          name: '',
+          groupId: [],
           authenticated: false,
         }
       }

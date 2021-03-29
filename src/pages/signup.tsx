@@ -1,13 +1,14 @@
 import React, { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { auth } from '../utils/firebase'
+import { auth, db } from '../utils/firebase'
 import { useDispatch } from 'react-redux'
 import { setAuthenticate } from '../store/slices/authSlice'
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
   const router  = useRouter()
   const dispatch = useDispatch()
 
@@ -16,8 +17,17 @@ const SignUpPage = () => {
     try {
       const res = await auth.createUserWithEmailAndPassword(email, password)
       if (res.user) {
-        dispatch(setAuthenticate(res.user.uid))
-        router.push('/dashboard')
+        const userInfo = {
+          uid: res.user.uid,
+          name: name,
+          groupId: [],
+        }
+
+        const storeRes = await db.collection('users').add(userInfo)
+        if (storeRes) {
+          dispatch(setAuthenticate(userInfo))
+          router.push('/dashboard')
+        }
       }
     } catch (error) {
       console.log(error.message)
@@ -30,6 +40,10 @@ const SignUpPage = () => {
         <div>
           <label htmlFor="email">Email: </label>
           <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="name">Name: </label>
+          <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div>
           <label htmlFor="password">Password: </label>

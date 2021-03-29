@@ -16,7 +16,7 @@ const DashboardPage = () => {
   return (
     <div>
       <h1>Dashboard Page</h1>
-      <p>{userState.uid}</p>
+      <p>ようこそ、{userState.name}</p>
     </div>
   )
 }
