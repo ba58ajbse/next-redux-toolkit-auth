@@ -1,25 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
-
-type AuthType = {
-  user: {
-    uid: string
-    name: string
-    groupId: string[]
-    authenticated: boolean
-  }
-}
-type UserInfoType = {
-  uid: string
-  name: string
-  groupId: string[]
-}
+import { AuthType, UserInfoType, GroupType} from '../../interfaces/user'
 
 const initialState: AuthType = {
   user: {
     uid: '',
     name: '',
-    groupId: [],
+    groupList: [],
     authenticated: false,
   }
 }
@@ -34,7 +21,7 @@ export const authSlice = createSlice({
         user: {
           uid: action.payload.uid,
           name: action.payload.name,
-          groupId: action.payload.groupId,
+          groupList: [...state.user.groupList, ...action.payload.groupList],
           authenticated: true
         }
       }
@@ -45,18 +32,18 @@ export const authSlice = createSlice({
         user: {
           uid: '',
           name: '',
-          groupId: [],
+          groupList: [],
           authenticated: false,
         }
       }
     },
-    setGroup: (state, action: PayloadAction<string>) => {
+    setGroup: (state, action: PayloadAction<GroupType>) => {
       return {
         ...state,
         user: {
           ...state.user,
-          groupId: [
-            ...state.user.groupId, action.payload
+          groupList: [
+            ...state.user.groupList, action.payload
           ]
         }
       }

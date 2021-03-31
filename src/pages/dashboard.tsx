@@ -14,13 +14,13 @@ const DashboardPage = () => {
     }
   }, [userState.authenticated])
 
-  const groups = userState.groupId.map((id) => <li key={id}>groupId: {id}</li>)
-  console.log(userState)
+  const groups = userState.groupList.map((group) => <li key={group.id}>groupList: {group.name}</li>)
+
   return (
     <div>
       <h1>Dashboard Page</h1>
       <p>ようこそ、{userState.name}</p>
-      {userState.groupId && <ul>{groups}</ul>}
+      {userState.groupList && <ul>{groups}</ul>}
       <GroupCreateForm />
     </div>
   )

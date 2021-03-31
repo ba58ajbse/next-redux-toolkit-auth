@@ -20,7 +20,7 @@ const SignUpPage = () => {
         const userInfo = {
           uid: res.user.uid,
           name: name,
-          groupId: [],
+          groupList: [],
         }
 
         const storeRes = await db.collection('users').add(userInfo)
