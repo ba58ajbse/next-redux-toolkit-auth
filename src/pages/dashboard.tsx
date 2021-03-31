@@ -14,7 +14,7 @@ const DashboardPage = () => {
     }
   }, [userState.authenticated])
 
-  const groups = userState.groupId.map((id) => <li>groupId: {id}</li>)
+  const groups = userState.groupId.map((id) => <li key={id}>groupId: {id}</li>)
   console.log(userState)
   return (
     <div>
