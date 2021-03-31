@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 import { selectAuth } from '../store/slices/authSlice'
 import GroupCreateForm from '../components/GroupCreateForm'
+import ProjectsList from '../components/ProjecsList'
 
 const DashboardPage = () => {
   const router = useRouter()
@@ -14,13 +15,11 @@ const DashboardPage = () => {
     }
   }, [userState.authenticated])
 
-  const groups = userState.groupList.map((group) => <li key={group.id}>groupList: {group.name}</li>)
-
   return (
     <div>
       <h1>Dashboard Page</h1>
       <p>ようこそ、{userState.name}</p>
-      {userState.groupList && <ul>{groups}</ul>}
+      {userState.groupList && userState.groupList.map((group) => <ProjectsList key={group.id} group={group} />)}
       <GroupCreateForm />
     </div>
   )
