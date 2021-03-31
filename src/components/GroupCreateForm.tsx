@@ -11,24 +11,28 @@ const GroupCreateForm = () => {
     e.preventDefault()
     if (groupName === '') return
     try {
+      // 同じ管理者が同じ名前を作成しようとした場合リターン
+      const groupsSnapshots = await db.collection('groups').get()
+      const isExistsName = groupsSnapshots.docs.some((doc) => doc.data().groupName === groupName && doc.data().admin === uid)
+      if (isExistsName) {
+        alert('同じ管理者が同じ名前のグループを作成することは出来ません')
+        return
+      }
+
       const res = await db.collection('groups').add({
         groupName,
         admin: uid,
         member: [uid]
       })
-      console.log(res.id)
-      let id
-      await db.collection('users')
-              .where('uid', '==', uid)
-              .get()
-              .then((snapshots) => {
-                snapshots.forEach((doc) => {
-                  id = doc.id
-                })
-              })
-      await db.collection('users').doc(id).update({
+
+      const query = await db.collection('users').get()
+      const ref = query.docs.find((doc) => doc.data().uid === uid)
+      if (ref !== undefined && ref.exists) {
+        ref.ref.update({
           groupId: firebase.firestore.FieldValue.arrayUnion(res.id)
-      })
+        });
+      }
+
       setGroup(res.id)
       alert('グループが作成出来ました')
     } catch (error) {
