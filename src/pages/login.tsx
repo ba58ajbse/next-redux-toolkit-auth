@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { auth, db } from '../utils/firebase'
 import { useDispatch } from 'react-redux'
 import { setAuthenticate } from '../store/slices/authSlice'
+import { GroupType } from '../interfaces/user'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -20,7 +21,7 @@ const LoginPage = () => {
         const userInfo = {
           uid: res.user.uid,
           name: data.name,
-          groupId: data.groupId,
+          groupList: data.groupList,
         }
 
         dispatch(setAuthenticate(userInfo))
@@ -33,18 +34,18 @@ const LoginPage = () => {
 
   const getName = async (uid: string) => {
     let name = ''
-    let groupId: string[] = []
+    let groupList: GroupType[] = []
     await db.collection('users')
             .where('uid', '==', uid)
             .get()
             .then((snapshots) => {
               snapshots.forEach((doc) => {
                 name = doc.data().name
-                groupId = doc.data().groupId
+                groupList = doc.data().groupList
               })
             })
             .catch((error) => console.log(error.message))
-    return { name, groupId }
+    return { name, groupList }
   }
 
   return (

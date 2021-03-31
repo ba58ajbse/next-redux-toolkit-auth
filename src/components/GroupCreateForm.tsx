@@ -25,15 +25,19 @@ const GroupCreateForm = () => {
         member: [uid]
       })
 
+      const groupInfo = {
+        id: res.id,
+        name: groupName
+      }
+
       const query = await db.collection('users').get()
       const ref = query.docs.find((doc) => doc.data().uid === uid)
       if (ref !== undefined && ref.exists) {
         ref.ref.update({
-          groupId: firebase.firestore.FieldValue.arrayUnion(res.id)
+          groupList: firebase.firestore.FieldValue.arrayUnion(groupInfo)
         });
       }
-
-      setGroup(res.id)
+      setGroup(groupInfo)
       alert('グループが作成出来ました')
     } catch (error) {
       console.log(error.message)
