@@ -35,7 +35,7 @@ const GroupCreateForm = () => {
       if (ref !== undefined && ref.exists) {
         ref.ref.update({
           groupList: firebase.firestore.FieldValue.arrayUnion(groupInfo)
-        });
+        })
       }
       setGroup(groupInfo)
       alert('グループが作成出来ました')
