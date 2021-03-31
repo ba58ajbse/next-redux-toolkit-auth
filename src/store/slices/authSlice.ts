@@ -2,24 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 import { AuthType, UserInfoType, GroupType} from '../../interfaces/user'
 
-// type AuthType = {
-//   user: {
-//     uid: string
-//     name: string
-//     groupList: GroupType[]
-//     authenticated: boolean
-//   }
-// }
-// type UserInfoType = {
-//   uid: string
-//   name: string
-//   groupList: GroupType[]
-// }
-// type GroupType = {
-//   id: string
-//   name: string
-// }
-
 const initialState: AuthType = {
   user: {
     uid: '',

@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { auth, db } from '../utils/firebase'
 import { useDispatch } from 'react-redux'
 import { setAuthenticate } from '../store/slices/authSlice'
-import { GroupType } from '../interfaces/user'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -17,7 +16,11 @@ const LoginPage = () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password)
       if (res.user) {
-        const data = await getName(res.user.uid)
+        const data = await getUser(res.user.uid)
+        if (data === null) {
+          alert('ログインに失敗しました')
+          return
+        }
         const userInfo = {
           uid: res.user.uid,
           name: data.name,
@@ -32,20 +35,15 @@ const LoginPage = () => {
     }
   }
 
-  const getName = async (uid: string) => {
-    let name = ''
-    let groupList: GroupType[] = []
-    await db.collection('users')
-            .where('uid', '==', uid)
-            .get()
-            .then((snapshots) => {
-              snapshots.forEach((doc) => {
-                name = doc.data().name
-                groupList = doc.data().groupList
-              })
-            })
-            .catch((error) => console.log(error.message))
-    return { name, groupList }
+  const getUser = async (uid: string) => {
+    const userSnapshots = await db.collection('users').get()
+    const userRef = userSnapshots.docs.find((doc) => doc.data().uid === uid)
+    if (userRef !== undefined && userRef.exists) {
+      const name = userRef.data().name
+      const groupList = userRef.data().groupList
+      return { name, groupList }
+    }
+    return null
   }
 
   return (
