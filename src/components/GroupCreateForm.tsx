@@ -13,17 +13,21 @@ const GroupCreateForm = () => {
     try {
       // 同じ管理者が同じ名前を作成しようとした場合リターン
       const groupsSnapshots = await db.collection('groups').get()
-      const isExistsName = groupsSnapshots.docs.some((doc) => doc.data().groupName === groupName && doc.data().admin === uid)
+      const isExistsName = groupsSnapshots
+                            .docs
+                            .some((doc) => doc.data().groupName === groupName && doc.data().admin === uid)
       if (isExistsName) {
         alert('同じ管理者が同じ名前のグループを作成することは出来ません')
         return
       }
 
-      const res = await db.collection('groups').add({
-        groupName,
-        admin: uid,
-        member: [uid]
-      })
+      const res = await db
+                        .collection('groups')
+                        .add({
+                          groupName,
+                          admin: uid,
+                          member: [uid]
+                        })
 
       const groupInfo = {
         id: res.id,
