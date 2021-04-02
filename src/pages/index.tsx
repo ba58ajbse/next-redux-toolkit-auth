@@ -1,9 +1,14 @@
 import Dashboard from './dashboard'
+import { useSelector } from 'react-redux'
+import { selectAuth } from '../store/slices/authSlice'
+import LoginPage from './login'
 
 const IndexPage = () => {
+  const authenticated = useSelector(selectAuth).authenticated
+
   return (
     <>
-      <Dashboard />
+      {authenticated ? <Dashboard /> : <LoginPage />}
     </>
   )
 }
